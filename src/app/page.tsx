@@ -1,68 +1,82 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Heart, Trophy, Sparkles } from "lucide-react"
-import { PixelCloud } from "../components/pixel-cloud"
-import { PixelHeartGrid } from "../components/pixel-heart-grid"
-import { RiddleModal } from "../components/riddle-modal"
-import { getLevelData } from "../lib/game-data"
+import { useState, useEffect } from "react";
+import { Heart } from "lucide-react";
+import { PixelCloud } from "../components/pixel-cloud";
+import { PixelHeartGrid } from "../components/pixel-heart-grid";
+import { RiddleModal } from "../components/riddle-modal";
+import { getLevelData } from "../lib/game-data";
 
-const STORAGE_KEY = "memory-hearts-progress"
+const STORAGE_KEY = "memory-hearts-progress";
+
+// Nubes con distintas velocidades, alturas y tamaños para dar profundidad
+const CLOUDS = [
+  { id: 1, top: "8%",  duration: "18s", delay: "0s",    scale: 1.2  },
+  { id: 2, top: "20%", duration: "25s", delay: "6s",    scale: 0.8  },
+  { id: 3, top: "5%",  duration: "32s", delay: "12s",   scale: 1.0  },
+  { id: 4, top: "35%", duration: "22s", delay: "3s",    scale: 0.6  },
+  { id: 5, top: "15%", duration: "28s", delay: "16s",   scale: 1.4  },
+  { id: 6, top: "45%", duration: "20s", delay: "9s",    scale: 0.7  },
+]
 
 export default function MemoryHeartsGame() {
-  const [unlockedLevel, setUnlockedLevel] = useState(1)
-  const [completedLevels, setCompletedLevels] = useState<number[]>([])
-  const [selectedLevel, setSelectedLevel] = useState<number | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [unlockedLevel, setUnlockedLevel] = useState(1);
+  const [completedLevels, setCompletedLevels] = useState<number[]>([]);
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Load progress from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const progress = JSON.parse(saved)
-        setUnlockedLevel(progress.unlockedLevel || 1)
-        setCompletedLevels(progress.completedLevels || [])
+        const progress = JSON.parse(saved);
+        setUnlockedLevel(progress.unlockedLevel || 1);
+        setCompletedLevels(progress.completedLevels || []);
       } catch {
-        // Invalid data, start fresh
+        // start fresh
       }
     }
-  }, [])
+  }, []);
 
-  // Save progress to localStorage
   useEffect(() => {
-    const progress = { unlockedLevel, completedLevels }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
-  }, [unlockedLevel, completedLevels])
+    const progress = { unlockedLevel, completedLevels };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }, [unlockedLevel, completedLevels]);
 
   const handleBlockClick = (level: number) => {
-    setSelectedLevel(level)
-    setIsModalOpen(true)
-    console.log("CLICK", level)
-  }
+    setSelectedLevel(level);
+    setIsModalOpen(true);
+  };
 
   const handleCorrectAnswer = () => {
     if (selectedLevel !== null) {
-      setCompletedLevels(prev => [...new Set([...prev, selectedLevel])])
+      setCompletedLevels((prev) => [...new Set([...prev, selectedLevel])]);
       if (selectedLevel === unlockedLevel && unlockedLevel < 15) {
-        setUnlockedLevel(prev => prev + 1)
+        setUnlockedLevel((prev) => prev + 1);
       }
     }
-  }
+  };
 
-  const levelData = selectedLevel ? getLevelData(selectedLevel) : null
-  console.log("LEVEL DATA:", levelData)
-  const isGameComplete = completedLevels.length >= 15
+  const levelData = selectedLevel ? getLevelData(selectedLevel) : undefined;
 
   return (
     <main className="min-h-screen bg-pixel-sky relative overflow-hidden">
-      {/* Animated clouds */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <PixelCloud 
-          className="cloud-drift"
-               style={{ top: '100px', left: '-150px', animationDuration: '20s' }} 
+
+      {/* Nubes animadas — varias en loop con diferentes velocidades */}
+      {CLOUDS.map((cloud) => (
+        <PixelCloud
+          key={cloud.id}
+          style={{
+            top: cloud.top,
+            left: "-200px",
+            animationDuration: cloud.duration,
+            animationDelay: cloud.delay,
+            transform: `scale(${cloud.scale})`,
+            transformOrigin: "left center",
+            opacity: cloud.scale > 1 ? 1 : 0.7, // nubes pequeñas = más lejanas = más transparentes
+          }}
         />
-      </div>
+      ))}
 
       {/* Main content */}
       <div className="relative z-10 container mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
@@ -70,31 +84,12 @@ export default function MemoryHeartsGame() {
         <header className="text-center mb-8 md:mb-12">
           <div className="inline-flex items-center gap-2 md:gap-3 mb-4 px-4 py-2 bg-pixel-cloud border-4 border-pixel-dark">
             <Heart className="w-5 h-5 md:w-6 md:h-6 text-pixel-red fill-pixel-red" />
-            <h1 className="text-sm md:text-lg text-pixel-dark tracking-tight">MEMORY HEARTS</h1>
+            <h1 className="text-sm md:text-lg text-pixel-dark tracking-tight">
+              HOLA CARA DE BOLA
+            </h1>
             <Heart className="w-5 h-5 md:w-6 md:h-6 text-pixel-red fill-pixel-red" />
           </div>
-          
-          <p className="text-[8px] md:text-[10px] text-pixel-cloud bg-pixel-dark/60 px-4 py-2 mt-2">
-            A LOVE QUEST FOR YOU
-          </p>
         </header>
-
-        {/* Progress indicator */}
-        <div className="flex items-center gap-4 mb-8 bg-pixel-cloud/90 px-4 py-2 border-4 border-pixel-dark">
-          <div className="flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-pixel-gold" />
-            <span className="text-[10px] text-pixel-dark">
-              {completedLevels.length} / 15
-            </span>
-          </div>
-          <div className="w-px h-4 bg-pixel-dark/30" />
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-pixel-pink" />
-            <span className="text-[10px] text-pixel-dark">
-              LEVEL {unlockedLevel}
-            </span>
-          </div>
-        </div>
 
         {/* Heart Grid */}
         <div className="flex-1 flex items-center justify-center py-4 relative z-20">
@@ -104,50 +99,19 @@ export default function MemoryHeartsGame() {
             onBlockClick={handleBlockClick}
           />
         </div>
-
-        {/* Game complete celebration */}
-        {isGameComplete && (
-          <div className="mt-8 p-6 bg-pixel-cloud border-4 border-pixel-red text-center max-w-sm">
-            <div className="flex justify-center gap-1 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <Heart 
-                  key={i} 
-                  className="w-5 h-5 text-pixel-red fill-pixel-red animate-bounce" 
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                />
-              ))}
-            </div>
-            <h2 className="text-sm text-pixel-red mb-2">QUEST COMPLETE!</h2>
-            <p className="text-[10px] text-pixel-dark leading-relaxed">
-              You unlocked all memories. Our love story is written in the stars!
-            </p>
-          </div>
-        )}
-
-        {/* Footer hint */}
-        <footer className="mt-8 text-center">
-          <p className="text-[8px] text-pixel-cloud/80 bg-pixel-dark/40 px-3 py-1.5">
-            {isGameComplete 
-              ? "THANK YOU FOR PLAYING WITH YOUR HEART" 
-              : "TAP THE GLOWING BLOCK TO CONTINUE"
-            }
-          </p>
-        </footer>
       </div>
 
       {/* Riddle Modal */}
-      {levelData && (
-        <RiddleModal
-          level={levelData.level}
-          riddle={levelData.riddle}
-          answer={levelData.answer}
-          message={levelData.message}
-          imageUrl={levelData.imageUrl}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onCorrect={handleCorrectAnswer}
-        />
-      )}
+      <RiddleModal
+        level={levelData?.level ?? 0}
+        riddle={levelData?.riddle ?? ""}
+        answer={levelData?.answer ?? ""}
+        message={levelData?.message ?? ""}
+        imageUrl={levelData?.imageUrl ?? ""}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCorrect={handleCorrectAnswer}
+      />
     </main>
-  )
+  );
 }
