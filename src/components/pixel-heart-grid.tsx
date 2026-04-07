@@ -34,10 +34,17 @@ const HEART_LAYOUT = [
   { row: 2, col: 2, level: 13 },
   { row: 2, col: 3, level: 14 },
   { row: 2, col: 4, level: 15 },
+  { row: 2, col: 5, level: 16 },
+  // Row 3 - punta del corazón (3 bloques)
+  { row: 3, col: 2, level: 17 },
+  { row: 3, col: 3, level: 18 },
+  { row: 3, col: 4, level: 19 },
+  // Row 4 - espacio vacío para forma
+  { row: 4, col: 3, level: 20 },
 ]
 
 export function PixelHeartGrid({ unlockedLevel, completedLevels, onBlockClick }: PixelHeartGridProps) {
-  const visibleBlocks = HEART_LAYOUT.slice(0, 15)
+  const visibleBlocks = HEART_LAYOUT.slice(0, 20)
 
   const maxCol = Math.max(...visibleBlocks.map(b => b.col))
   const maxRow = Math.max(...visibleBlocks.map(b => b.row))

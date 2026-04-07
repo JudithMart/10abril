@@ -1,3 +1,31 @@
+
+// Hints for each level
+const hints: Record<number, string> = {
+  1: "17 January 2026",
+  2: "Month of love, day of the year",
+  3: "boulevard",
+  4: "Cafenio",
+  5: " procesador",
+  6: " motor turbo",
+  7: "gravedad",
+  8: "complejidad a partir",
+  9: "ecuación, elegiría repetir",
+  10: "más estabilidad",
+  11: " inevitablemente atraído",
+  12: "(Es un motor) 2:31 a.m",
+  13: "mazda",
+  14: "spool antes de liberar",
+  15: "no hay",
+  16: "Juan",
+  17: "granitos de arena",
+  18: "robot",
+  19: "no sigue las reglas convencionales",
+  20: "NO"
+}
+
+function getHintByLevel(level: number): string {
+  return hints[level] || "No hay pista disponible para este nivel.";
+}
 "use client"
 
 import { useState, useEffect } from "react"
@@ -9,7 +37,6 @@ interface RiddleModalProps {
   riddle: string
   answer: string
   message: string
-  imageUrl: string
   isOpen: boolean
   onClose: () => void
   onCorrect: () => void
@@ -18,10 +45,10 @@ interface RiddleModalProps {
 export function RiddleModal({ 
   level, 
   riddle, 
-  answer, 
-  message, 
-  imageUrl, 
+  answer,  
+  message,
   isOpen, 
+
   onClose, 
   onCorrect 
 }: RiddleModalProps) {
@@ -73,10 +100,11 @@ export function RiddleModal({
 
   return (
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.7)" }}
+      style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", 
+        justifyContent: "center", backgroundColor: "rgba(0,0,0,0.7)" }}
       onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
     >
-      <div style={{ position: "relative", width: "100%", maxWidth: "28rem", margin: "0 1rem" }} className="bg-pixel-cloud border-8 border-pixel-dark">
+      <div style={{ position: "relative", width: "60%", maxWidth: "28rem", margin: "0 1rem" }} className="bg-pixel-cloud border-8 border-pixel-dark">
         {/* Corner decorations */}
         <div className="absolute top-0 left-0 w-4 h-4 bg-pixel-gold" />
         <div className="absolute top-0 right-0 w-4 h-4 bg-pixel-gold" />
@@ -84,13 +112,14 @@ export function RiddleModal({
         <div className="absolute bottom-0 right-0 w-4 h-4 bg-pixel-gold" />
 
         {/* Header */}
-        <div className="bg-pixel-red p-4 flex items-center justify-between border-b-4 border-pixel-dark">
+        <div className="bg-pixel-purple p-4 
+        flex items-center justify-between border-b-4 border-pixel-dark">
           <div className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-pixel-cloud fill-pixel-cloud" />
-            <span className="text-pixel-cloud text-xs">LEVEL {level}</span>
+            <Heart className="w-5 h-5 text-pixel-cloud fill-pixel-cloud " />
+            <span className="text-black text-xs "> LEVEL {level}</span>
           </div>
-          <button onClick={handleClose} className="text-pixel-cloud hover:scale-110 transition-transform">
-            <X className="w-6 h-6" />
+          <button onClick={handleClose} className="bg-pixel-purple text-pixel-cloud hover:scale-110 transition-transform">
+            <X className="w-6 h-6 " />
           </button>
         </div>
 
@@ -111,58 +140,47 @@ export function RiddleModal({
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Your answer..."
                   autoFocus
-                  className="w-full p-3 text-xs bg-pixel-cloud border-4 border-pixel-dark focus:border-pixel-red outline-none text-pixel-dark placeholder:text-pixel-dark/40"
+                  className="w-full max-w-full box-border p-4 text-xs bg-pixel-cloud border-4 border-pixel-dark focus:border-pixel-red outline-none text-pixel-dark placeholder:text-pixel-dark/40"
+                  style={{ minWidth: 0 }}
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-pixel-red hover:bg-pixel-pink text-pixel-cloud border-4 border-pixel-dark text-xs py-3 rounded-none"
+                  className="w-full bg-pixel-purple hover:bg-pixel-pink text-pixel-cloud border-4 border-pixel-dark text-xs py-3 rounded-none"
                 >
-                  <Sparkles className="w-4 h-4 mr-2" />
+                  
                   SUBMIT
                 </Button>
               </form>
 
               {showError && (
-                <div className="mt-4 p-3 bg-pixel-gold/30 border-4 border-pixel-gold flex items-center gap-2">
-                  <XCircle className="w-5 h-5 text-pixel-dark shrink-0" />
-                  <p className="text-[9px] md:text-[10px] text-pixel-dark">
-                    {"Oops! That's not quite right. Try again, my love!"}
-                  </p>
+                <div className="mt-4 p-3 bg-pixel-gold/30 border-4 border-pixel-gold flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <XCircle className="w-5 h-5 text-pixel-dark shrink-0" />
+                    <p className="text-[9px] md:text-[10px] text-pixel-dark">
+                      {"Oops! That's not quite right. Try again, my love!"}
+                    </p>
+                  </div>
+                  <div className="mt-2 p-2 bg-pixel-sky/30 border-2 border-pixel-dark rounded">
+                    <span className="font-bold text-pixel-dark text-[9px] md:text-[10px]">Pista:</span>
+                    <span className="ml-2 text-pixel-dark text-[9px] md:text-[10px]">
+                      {getHintByLevel(level)}
+                    </span>
+                  </div>
                 </div>
               )}
             </>
           ) : (
             <div className="text-center space-y-4">
-              <div className="relative w-full aspect-square max-w-[200px] mx-auto border-4 border-pixel-dark overflow-hidden bg-pixel-pink/20">
-                <img
-                  src={imageUrl}
-                  alt="Memory unlocked"
-                  className="w-full h-full object-cover pixel-perfect"
-                />
-                <div className="absolute top-2 left-2 w-3 h-3 bg-white/50" />
-              </div>
-
-              <div className="p-4 bg-pixel-pink/20 border-4 border-pixel-red">
-                <p className="text-[10px] md:text-xs leading-relaxed text-pixel-dark">
-                  {message}
-                </p>
-              </div>
-
-              <div className="flex justify-center gap-2">
-                {[...Array(3)].map((_, i) => (
-                  <Heart
-                    key={i}
-                    className="w-4 h-4 text-pixel-red fill-pixel-red animate-bounce"
-                    style={{ animationDelay: `${i * 0.2}s` }}
-                  />
-                ))}
-              </div>
-
+              
+              <Sparkles className="w-8 h-8 text-pixel-gold mx-auto" />
+              <h2 className="text-lg md:text-xl text-pixel-dark font-bold">
+                {message}
+              </h2>
               <Button
                 onClick={handleContinue}
                 className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground border-4 border-pixel-dark text-xs py-3 rounded-none"
               >
-                <Heart className="w-4 h-4 mr-2 fill-current" />
+                <Heart className="w-4 h-4 mr-2 ml-5 fill-current" />
                 CONTINUE
               </Button>
             </div>
