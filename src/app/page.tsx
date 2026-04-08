@@ -6,6 +6,10 @@ import { PixelCloud } from "../components/pixel-cloud";
 import { PixelHeartGrid } from "../components/pixel-heart-grid";
 import { RiddleModal } from "../components/riddle-modal";
 import { getLevelData } from "../lib/game-data";
+import VideoPortal from "../components/VideoPortal";
+import { VideoOverlay } from "../components/video-overlay";
+
+
 
 const STORAGE_KEY = "memory-hearts-progress";
 
@@ -24,6 +28,7 @@ export default function MemoryHeartsGame() {
   const [completedLevels, setCompletedLevels] = useState<number[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   const TOTAL_LEVELS = 20;
   const allCompleted =
@@ -117,28 +122,34 @@ export default function MemoryHeartsGame() {
             completedLevels={completedLevels}
             onBlockClick={handleBlockClick}
           />
-
           {allCompleted && (
-            <button
-              className="
-         mt-6
-    w-fit mx-auto
-    px-6 py-3
-    bg-pixel-red text-white
-    border-4 border-pixel-dark
-    hover:translate-y-[2px]
-    active:translate-y-[4px]
-    transition-all
-    font-bold tracking-wide
-    whitespace-nowrap
-  "
-              onClick={() => alert("Aquí irá el video ❤️")}
-            >
-              Ready?
-            </button>
+            <>
+              <button
+                className="
+               mt-6
+              w-fit mx-auto
+              px-6 py-3
+             bg-pixel-red text-white
+              border-4 border-pixel-dark
+              hover:translate-y-[2px]
+              active:translate-y-[4px]
+              transition-all
+              font-bold tracking-wide
+              whitespace-nowrap"
+                onClick={() => setShowVideo(true)}
+              >
+                Ready?
+              </button>
+            </>
           )}
         </div>
       </div>
+
+      {/* Video Overlay */}
+<VideoOverlay
+  show={showVideo}
+  onClose={() => setShowVideo(false)}
+/>
 
       {/* Riddle Modal */}
       <RiddleModal
