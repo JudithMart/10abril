@@ -9,8 +9,6 @@ import { getLevelData } from "../lib/game-data";
 import VideoPortal from "../components/VideoPortal";
 import { VideoOverlay } from "../components/video-overlay";
 
-
-
 const STORAGE_KEY = "memory-hearts-progress";
 
 // Nubes con distintas velocidades, alturas y tamaños para dar profundidad
@@ -146,10 +144,7 @@ export default function MemoryHeartsGame() {
       </div>
 
       {/* Video Overlay */}
-<VideoOverlay
-  show={showVideo}
-  onClose={() => setShowVideo(false)}
-/>
+      <VideoOverlay show={showVideo} onClose={() => setShowVideo(false)} />
 
       {/* Riddle Modal */}
       <RiddleModal

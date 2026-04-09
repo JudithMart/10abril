@@ -29,7 +29,6 @@ export function VideoOverlay({
       <video
         src="/video.mp4"
         autoPlay
-        muted
         controls
         playsInline
         style={{
