@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-@custom-variant dark (&:is(.dark *));
+
 
 :root {
   /* Retro pixel art color palette - Mario-style */

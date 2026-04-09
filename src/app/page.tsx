@@ -108,7 +108,7 @@ export default function MemoryHeartsGame() {
           onClick={unlockAllLevels}
           className="fixed bottom-4 right-4 px-4 py-2 bg-black text-white border-2 border-white text-xs opacity-60 hover:opacity-100 z-50"
         >
-          Unlock All (Test)
+          No le piques :/
         </button>
 
         {/* Heart Grid */}

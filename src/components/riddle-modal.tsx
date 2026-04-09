@@ -104,7 +104,7 @@ export function RiddleModal({
         justifyContent: "center", backgroundColor: "rgba(0,0,0,0.7)" }}
       onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
     >
-      <div style={{ position: "relative", width: "60%", maxWidth: "28rem", margin: "0 1rem" }} className="bg-pixel-cloud border-8 border-pixel-dark">
+      <div style={{ position: "relative", width: "60%", maxWidth: "28rem", margin: "0 1rem" }} className="bg-blue-200 border-8 border-pixel-dark">
         {/* Corner decorations */}
         <div className="absolute top-0 left-0 w-4 h-4 bg-pixel-gold" />
         <div className="absolute top-0 right-0 w-4 h-4 bg-pixel-gold" />
@@ -145,7 +145,7 @@ export function RiddleModal({
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-pixel-purple hover:bg-pixel-pink text-pixel-cloud border-4 border-pixel-dark text-xs py-3 rounded-none"
+                  className="w-full bg-lime-600 hover:bg-lime-500 text-pixel-cloud border-4 border-pixel-dark text-xs py-3 rounded-none"
                 >
                   
                   SUBMIT
@@ -178,7 +178,7 @@ export function RiddleModal({
               </h2>
               <Button
                 onClick={handleContinue}
-                className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground border-4 border-pixel-dark text-xs py-3 rounded-none"
+                className="w-full bg-lime-600 hover:bg-lime-500 text-secondary-foreground border-4 border-pixel-dark text-xs py-3 rounded-none"
               >
                 <Heart className="w-4 h-4 mr-2 ml-5 fill-current" />
                 CONTINUE
